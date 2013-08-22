@@ -1,0 +1,145 @@
+# depslib dependency file v1.0
+1377073803 source:c:\users\depes\dropbox\programming\blackjack\main.cpp
+	"BJGame_Flow_Handler.h"
+	<memory>
+	<iostream>
+	<iomanip>
+	<list>
+	<utility>
+	<algorithm>
+
+1377141359 c:\users\depes\dropbox\programming\blackjack\h\card.h
+	<string>
+
+1376550208 source:c:\users\depes crystalline\desktop\dropbox\programming\blackjack\main.cpp
+	"SuitDeckFactory.h"
+	"UnoDeckFactory.h"
+
+1376531876 c:\users\depes crystalline\desktop\dropbox\programming\blackjack\h\deck.h
+	"Card.h"
+	<list>
+	<random>
+	<memory>
+	"Deck.inl"
+
+1376538703 c:\users\depes crystalline\desktop\dropbox\programming\blackjack\h\card.h
+
+1376550016 c:\users\depes crystalline\desktop\dropbox\programming\blackjack\src\deck.inl
+	<iterator>
+	<algorithm>
+	<chrono>
+	<functional>
+
+1376531969 c:\users\depes crystalline\desktop\dropbox\programming\blackjack\h\stl_extensions.h
+	<map>
+	<unordered_map>
+	"STL_Extensions.inl"
+
+1376538558 c:\users\depes crystalline\desktop\dropbox\programming\blackjack\src\stl_extensions.inl
+	<algorithm>
+	<iterator>
+	<vector>
+
+1376549752 c:\users\depes crystalline\desktop\dropbox\programming\blackjack\h\deckfactory.h
+
+1376549979 source:c:\users\depes crystalline\desktop\dropbox\programming\blackjack\src\suitdeckfactory.cpp
+	"SuitDeckFactory.h"
+	"Deck.h"
+
+1376549716 c:\users\depes crystalline\desktop\dropbox\programming\blackjack\h\suitdeckfactory.h
+	"DeckFactory.h"
+
+1376549690 c:\users\depes crystalline\desktop\dropbox\programming\blackjack\h\unodeckfactory.h
+	"DeckFactory.h"
+
+1376553316 c:\users\depes\dropbox\programming\blackjack\h\suitdeckfactory.h
+	"DeckFactory.h"
+
+1376553352 c:\users\depes\dropbox\programming\blackjack\h\deckfactory.h
+
+1376553290 c:\users\depes\dropbox\programming\blackjack\h\unodeckfactory.h
+	"DeckFactory.h"
+
+1376876829 source:c:\users\depes\dropbox\programming\blackjack\src\suitdeckfactory.cpp
+	"SuitDeckFactory.h"
+	"Deck.h"
+	<cstddef>
+
+1376598961 c:\users\depes\dropbox\programming\blackjack\h\deck.h
+	"Card.h"
+	<list>
+	<random>
+	<memory>
+	"Deck.inl"
+
+1376596532 c:\users\depes\dropbox\programming\blackjack\src\deck.inl
+
+1376596909 source:c:\users\depes\dropbox\programming\blackjack\src\unodeckfactory.cpp
+	"UnoDeckFactory.h"
+	"Deck.h"
+
+1376613410 source:c:\users\depes\dropbox\programming\blackjack\src\card.cpp
+	"Card.h"
+
+1376599030 source:c:\users\depes\dropbox\programming\blackjack\src\deck.cpp
+	"Deck.h"
+	<iterator>
+	<algorithm>
+	<chrono>
+	<functional>
+
+1376609358 source:c:\users\depes\dropbox\programming\blackjack\src\bj_player.cpp
+	"BJ_Player.h"
+
+1376602449 c:\users\depes\dropbox\programming\blackjack\h\bj_player.h
+	"Deck.h"
+	<vector>
+
+1377072165 c:\users\depes\dropbox\programming\blackjack\h\bjplayer.h
+	"Deck.h"
+	<vector>
+
+1377072146 source:c:\users\depes\dropbox\programming\blackjack\src\bjplayer.cpp
+	"BJPlayer.h"
+
+1376691473 c:\users\depes\dropbox\programming\blackjack\h\bjgame_handler.h
+	"BJPlayer.h"
+	<map>
+	<memory>
+	<initializer_list>
+
+1376691486 source:c:\users\depes\dropbox\programming\blackjack\src\bjgame_handler.cpp
+	"BJGame_Handler.h"
+	"SuitDeckFactory.h"
+	<random>
+	<chrono>
+
+1377119220 c:\users\depes\dropbox\programming\blackjack\h\bjplayer_handler.h
+	"BJPlayer.h"
+	<map>
+	<memory>
+	<list>
+	"BJPlayer_Handler.inl"
+
+1377072694 source:c:\users\depes\dropbox\programming\blackjack\src\bjplayer_handler.cpp
+	"BJPlayer_Handler.h"
+	"SuitDeckFactory.h"
+	<random>
+	<chrono>
+	<algorithm>
+
+1377073464 c:\users\depes\dropbox\programming\blackjack\h\bjgame_flow_handler.h
+	"BJPlayer_Handler.h"
+	"BJGame_Flow_Handler.inl"
+
+1377073545 source:c:\users\depes\dropbox\programming\blackjack\src\bjgame_flow_handler.cpp
+	"BJGame_Flow_Handler.h"
+	<cctype>
+	<iostream>
+	<limits>
+
+1377035055 c:\users\depes\dropbox\programming\blackjack\src\bjplayer_handler.inl
+	"SuitDeckFactory.h"
+
+1376728009 c:\users\depes\dropbox\programming\blackjack\src\bjgame_flow_handler.inl
+
