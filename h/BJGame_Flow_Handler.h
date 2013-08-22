@@ -27,6 +27,8 @@ class BJGame_Flow_Handler{
     private:
         std::shared_ptr<BJPlayer_Handler>       m_player_handler;
         const std::list<BJPlayer_Handler::Name> m_names;
+
+        static constexpr size_t                 k_blackjack = 21;
 };
 
 #include "BJGame_Flow_Handler.inl"

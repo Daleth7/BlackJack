@@ -35,3 +35,14 @@ BJPlayer_Handler::BJPlayer_Handler(
         ));
     this->arbitrary_shuffle();
 }
+
+template <class Container>
+bool BJPlayer_Handler::check_key(
+    Name& testee,
+    const Container& container
+)const{
+    if(testee.empty()) testee = m_players.begin()->first;
+    if(container.find(testee) != container.end())
+        return true;
+    else return false;
+}

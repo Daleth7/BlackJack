@@ -15,8 +15,9 @@ class Deck;
     //  there is only one player.
 class BJPlayer_Handler{
     public:
-        using Name      = std::string;
-        using HandPots  = std::vector<BJPlayer::Money>;
+        using Name              = std::string;
+        using HandPots          = std::vector<BJPlayer::Money>;
+        using HandDoubleDowns   = std::list<size_t>;
 
         template <typename NameIter, typename MoneyIter>
         static std::shared_ptr<BJPlayer_Handler> instance(
@@ -26,11 +27,13 @@ class BJPlayer_Handler{
     //Read-only
         size_t players_left()const;
         BJPlayer player(Name = "")const;
+        size_t hand_size(Name = "", size_t hand_index = 0)const;
+        size_t hand_count(Name = "")const;
         bool out(Name = "")const;
         BJPlayer::Money pot(Name = "", size_t hand_index = 0)const;
         const BJPlayer& dealer()const;
-        bool double_downed(Name = "")const;
-        size_t count_double_downed()const;
+        bool double_downed(Name = "", size_t hand_index = 0)const;
+        size_t count_double_downed(Name = "")const;
 
             //Reset everything from deck to players' money
         void reset();
@@ -46,6 +49,7 @@ class BJPlayer_Handler{
             //Clean up cards and award pots to the winners
         void calculate_winner();
         void remove_player(Name = "");
+        void erase_player(Name = "");
         void add_player(
             const Name& = "",
             BJPlayer::Money = k_default_starting_amount
@@ -66,7 +70,10 @@ class BJPlayer_Handler{
             NameIter, NameIter,
             MoneyIter
         );
+    //Helpers
         void arbitrary_shuffle();
+        template <class Container>
+            bool check_key(Name&, const Container&)const;
     private:
         BJPlayer                            m_dealer;
         std::map<Name, BJPlayer>
@@ -75,7 +82,7 @@ class BJPlayer_Handler{
         ;
         std::unique_ptr<Deck>               m_deck;
         std::map<Name, HandPots>            m_pots;
-        std::list<Name>                     m_double_downed;
+        std::map<Name, HandDoubleDowns>     m_double_downed;
         const BJPlayer::Money               k_starting_amount;
         static constexpr BJPlayer::Money
                                             k_default_bet = 20,

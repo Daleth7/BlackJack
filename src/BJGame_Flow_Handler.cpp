@@ -49,7 +49,7 @@ bool BJGame_Flow_Handler::play_turn(){
             ;
         }
         if(
-            m_player_handler->player(*iter).hand_value() == 21 &&
+            m_player_handler->player(*iter).hand_value() == k_blackjack &&
             m_player_handler->player(*iter).hand_size() == 2
         ) cout << "\nBlack Jack!\n";
 
@@ -72,11 +72,8 @@ bool BJGame_Flow_Handler::play_turn(){
         cout << "\n\nPress enter to start the next player's turn.";
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
-    if(
-        m_player_handler->count_double_downed()
-            >= m_player_handler->players_left()
-    ) return true;
-    else if(m_player_handler->players_left() > 0)
+
+    if(m_player_handler->players_left() > 0)
         return m_player_handler->dealer_hit();
     else
         return true;
@@ -163,7 +160,13 @@ bool BJGame_Flow_Handler::display_round_end(){
                 break;
             }else if(choice == "yes")
                 break;
-            else if(choice == "no"){
+            else if(
+                choice == "no" &&
+                m_player_handler->player(*iter).money() == 0
+            ){
+                m_player_handler->erase_player(*iter);
+                break;
+            }else if(choice == "no"){
                 m_player_handler->remove_player(*iter);
                 break;
             }else

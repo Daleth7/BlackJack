@@ -8,12 +8,18 @@
 size_t BJPlayer_Handler::players_left()const
     {return m_players.size();}
 BJPlayer BJPlayer_Handler::player(Name key)const{
-    if(key.empty()) key = m_players.begin()->first;
-    if(m_players.find(key) != m_players.end())
-        return m_players.at(key);
-    else if(m_out_players.find(key) != m_out_players.end())
+    if(check_key(key, m_players)) return m_players.at(key);
+    else if(check_key(key, m_out_players))
         return m_out_players.at(key);
     else return BJPlayer(0);
+}
+size_t BJPlayer_Handler::hand_size(Name key, size_t hand_index)const{
+    if(!check_key(key, m_players)) return 0;
+    else return m_players.at(key).hand_size(hand_index);
+}
+size_t BJPlayer_Handler::hand_count(Name key)const{
+    if(!check_key(key, m_players)) return 0;
+    else return m_players.at(key).hand_count();
 }
 bool BJPlayer_Handler::out(Name key)const{
     if(key.empty() && m_players.size() == 0) return true;
@@ -22,28 +28,34 @@ bool BJPlayer_Handler::out(Name key)const{
         return true;
     else return false;
 }
+
 BJPlayer::Money BJPlayer_Handler::pot(
     Name key,
     size_t hand_index
 )const{
-    if(key.empty()) key = m_players.begin()->first;
-    if(m_pots.find(key) != m_pots.end())
-        return m_pots.at(key)[hand_index];
+    if(check_key(key, m_pots)) return m_pots.at(key)[hand_index];
     else return 0;
 }
 const BJPlayer& BJPlayer_Handler::dealer()const
     {return m_dealer;}
-bool BJPlayer_Handler::double_downed(Name key)const{
-    if(key.empty()) key = m_players.begin()->first;
+bool BJPlayer_Handler::double_downed(
+    Name key,
+    size_t hand_index
+)const{
+    if(!check_key(key, m_double_downed)) return false;
     if(std::find(
-        m_double_downed.begin(),
-        m_double_downed.end(),
-        key
-    ) != m_double_downed.end()) return true;
+        m_double_downed.at(key).begin(),
+        m_double_downed.at(key).end(),
+        hand_index
+    ) != m_double_downed.at(key).end()) return true;
     return false;
 }
-size_t BJPlayer_Handler::count_double_downed()const
-    {return m_double_downed.size();}
+size_t BJPlayer_Handler::count_double_downed(Name key)const{
+    if(key.empty()) return m_double_downed.size();
+    else if(check_key(key, m_double_downed))
+        return m_double_downed.at(key).size();
+    else return 0;
+}
 
 void BJPlayer_Handler::reset(){
     m_dealer = BJPlayer(0);
@@ -56,6 +68,7 @@ void BJPlayer_Handler::reset(){
     m_deck->reset();
     this->arbitrary_shuffle();
     m_pots.clear();
+    m_double_downed.clear();
 }
 
 void BJPlayer_Handler::deal(){
@@ -71,13 +84,11 @@ void BJPlayer_Handler::deal(){
     m_dealer.add_card(m_deck->draw());
 }
 void BJPlayer_Handler::place_bet(Name key, BJPlayer::Money amount){
-    if(key.empty()) key = m_players.begin()->first;
-    if(m_players.find(key) == m_players.end()) return;
+    if(!check_key(key, m_players)) return;
     m_pots[key].push_back(m_players[key].bet(amount));
 }
 bool BJPlayer_Handler::hit(Name key){
-    if(key.empty()) key = m_players.begin()->first;
-    if(m_players.find(key) == m_players.end()) return false;
+    if(!check_key(key, m_players)) return false;
     m_players[key].add_card(m_deck->draw());
     if(m_players[key].hand_value() > k_blackjack){
         m_out_players.insert(std::make_pair(key, m_players[key]));
@@ -94,20 +105,22 @@ bool BJPlayer_Handler::dealer_hit(){
     return false;
 }
 void BJPlayer_Handler::surrender(Name key){
-    if(key.empty()) key = m_players.begin()->first;
-    if(m_players.find(key) == m_players.end()) return;
+    if(!check_key(key, m_players)) return;
     m_players[key].clear_hand();
+    if(m_players[key].hand_count() == 1){
+        m_out_players.insert(std::make_pair(key, m_players[key]));
+        m_players.erase(key);
+    }
 }
 void BJPlayer_Handler::double_down(Name key, size_t hand_index){
-    if(key.empty()) key = m_players.begin()->first;
     if(
-        m_players.find(key) == m_players.end() ||
+        !check_key(key, m_players) ||
         m_pots.at(key).at(hand_index) == 0
     ) return;
     auto additional_pot(m_players[key].bet(m_pots.at(key).at(hand_index)));
     m_players[key].add_card(m_deck->draw(), hand_index);
     m_pots[key][hand_index] += additional_pot;
-    m_double_downed.push_back(key);
+    m_double_downed[key].push_back(hand_index);
     if(m_players[key].hand_value(hand_index) > k_blackjack){
         m_out_players.insert(std::make_pair(key, m_players[key]));
         m_players.erase(key);
@@ -158,10 +171,17 @@ void BJPlayer_Handler::calculate_winner(){
     m_double_downed.clear();
 }
 void BJPlayer_Handler::remove_player(Name key){
-    if(key.empty()) key = m_players.begin()->first;
-    if(m_players.find(key) == m_players.end()) return;
+    if(!check_key(key, m_players)) return;
     m_out_players.insert(std::make_pair(key, m_players[key]));
     m_players.erase(key);
+}
+void BJPlayer_Handler::erase_player(Name key){
+    if(
+        !check_key(key, m_players) &&
+        m_players[key].money() == 0
+    ) m_players.erase(key);
+    else if(!check_key(key, m_out_players))
+        m_out_players.erase(key);
 }
 void BJPlayer_Handler::add_player(
     const Name& newname,
@@ -177,8 +197,7 @@ void BJPlayer_Handler::return_player(
     Name key,
     BJPlayer::Money newamount
 ){
-    if(key.empty()) key = m_players.begin()->first;
-    if(m_out_players.find(key) == m_out_players.end()) return;
+    if(!check_key(key, m_out_players)) return;
     m_out_players[key].add_money(newamount);
     m_players.insert(std::make_pair(key, m_out_players[key]));
     m_out_players.erase(key);

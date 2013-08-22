@@ -143,3 +143,87 @@
 
 1376728009 c:\users\depes\dropbox\programming\blackjack\src\bjgame_flow_handler.inl
 
+1377073803 source:c:\users\depes\documents\github\blackjack\main.cpp
+	"BJGame_Flow_Handler.h"
+	<memory>
+	<iostream>
+	<iomanip>
+	<list>
+	<utility>
+	<algorithm>
+
+1377160219 c:\users\depes\documents\github\blackjack\h\bjgame_flow_handler.h
+	"BJPlayer_Handler.h"
+	"BJGame_Flow_Handler.inl"
+
+1377161592 c:\users\depes\documents\github\blackjack\h\bjplayer_handler.h
+	"BJPlayer.h"
+	<map>
+	<memory>
+	<list>
+	"BJPlayer_Handler.inl"
+
+1377072165 c:\users\depes\documents\github\blackjack\h\bjplayer.h
+	"Deck.h"
+	<vector>
+
+1376598961 c:\users\depes\documents\github\blackjack\h\deck.h
+	"Card.h"
+	<list>
+	<random>
+	<memory>
+	"Deck.inl"
+
+1377141359 c:\users\depes\documents\github\blackjack\h\card.h
+	<string>
+
+1376596532 c:\users\depes\documents\github\blackjack\src\deck.inl
+
+1377160717 c:\users\depes\documents\github\blackjack\src\bjplayer_handler.inl
+	"SuitDeckFactory.h"
+
+1376553316 c:\users\depes\documents\github\blackjack\h\suitdeckfactory.h
+	"DeckFactory.h"
+
+1376553352 c:\users\depes\documents\github\blackjack\h\deckfactory.h
+
+1376728009 c:\users\depes\documents\github\blackjack\src\bjgame_flow_handler.inl
+
+1377161805 source:c:\users\depes\documents\github\blackjack\src\bjgame_flow_handler.cpp
+	"BJGame_Flow_Handler.h"
+	<cctype>
+	<iostream>
+	<limits>
+
+1377072146 source:c:\users\depes\documents\github\blackjack\src\bjplayer.cpp
+	"BJPlayer.h"
+
+1377141338 source:c:\users\depes\documents\github\blackjack\src\card.cpp
+	"Card.h"
+
+1376599030 source:c:\users\depes\documents\github\blackjack\src\deck.cpp
+	"Deck.h"
+	<iterator>
+	<algorithm>
+	<chrono>
+	<functional>
+
+1376876829 source:c:\users\depes\documents\github\blackjack\src\suitdeckfactory.cpp
+	"SuitDeckFactory.h"
+	"Deck.h"
+	<cstddef>
+
+1376596909 source:c:\users\depes\documents\github\blackjack\src\unodeckfactory.cpp
+	"UnoDeckFactory.h"
+	"Deck.h"
+
+1376553290 c:\users\depes\documents\github\blackjack\h\unodeckfactory.h
+	"DeckFactory.h"
+
+1377161685 source:c:\users\depes\documents\github\blackjack\src\bjplayer_handler.cpp
+	"BJPlayer_Handler.h"
+	"SuitDeckFactory.h"
+	<random>
+	<chrono>
+	<algorithm>
+
