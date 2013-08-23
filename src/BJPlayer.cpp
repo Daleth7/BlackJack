@@ -18,6 +18,10 @@ Deck::Card_t BJPlayer::card(
     ) return nullptr;
     return m_hands[hand_index][card_index];
 }
+Deck::Card_t BJPlayer::last_card(size_t hand_index)const{
+    if(hand_index >= m_hands.size()) return nullptr;
+    return m_hands.at(hand_index).back();
+}
 
 size_t BJPlayer::hand_value(size_t hand_index)const{
     if(
@@ -49,11 +53,14 @@ void BJPlayer::add_card(
 }
 void BJPlayer::clear_hand(size_t hand_index){
     if(hand_index >= m_hands.size()) return;
-    m_hands[hand_index].clear();
+    if(hand_index == 0)
+        m_hands[hand_index].clear();
+    else
+        m_hands.erase(m_hands.begin() + hand_index);
 }
 void BJPlayer::clear_all_hands(){
     m_hands.resize(1);
-    m_hands.front().clear();
+    m_hands[0].clear();
 }
 BJPlayer::Money BJPlayer::bet(Money request){
     if(m_money == 0) return 0;

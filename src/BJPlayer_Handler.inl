@@ -46,3 +46,14 @@ bool BJPlayer_Handler::check_key(
         return true;
     else return false;
 }
+
+//Need to centralize transfer system
+template <class Mapped, typename Key>
+void BJPlayer_Handler::transfer_item(
+    Mapped& src,
+    Mapped& dest,
+    Key key
+){
+    dest.insert(*src.find(key));
+    src.erase(key);
+}

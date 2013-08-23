@@ -47,15 +47,10 @@ int main(){
         newplayers.first.begin(), newplayers.first.end(),
         newplayers.second.begin()
     );
-    while(game.players_left() > 0){
+    do{
         game.start();
-        while(
-            !game.play_turn() &&
-            (cout << "\nPress enter to start the next turn!") &&
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n')
-        );
-        game.display_round_end();
-    }
+        game.play_turn();
+    }while(game.display_round_end());
 
     cout << std::fixed << std::setprecision(1) << "\nThank you for playing Black Jack v" << ver << "!\n";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');

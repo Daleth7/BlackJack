@@ -17,66 +17,56 @@ const std::string
 
 size_t BJGame_Flow_Handler::players_left()const
     {return m_player_handler->players_left();}
-bool BJGame_Flow_Handler::play_turn(){
+void BJGame_Flow_Handler::play_turn(){
     using namespace std;
     for(auto iter(m_names.begin()); iter != m_names.end(); ++iter){
         if(
             m_player_handler->out(*iter) ||
             m_player_handler->double_downed(*iter)
         ) continue;
-    //Dealer hand
-        cout << "\nDealer's current hand:\n\tHidden, ";
         for(
-            size_t i(m_player_handler->dealer().hand_size()-1);
-            i > 0;
-            --i
+            size_t hand(0);
+            hand < m_player_handler->hand_count(*iter);
+            ++hand
         ){
-            cout
-                << m_player_handler->dealer().card(i-1)->name()
-                << (i != 1 ? ", " : "")
-            ;
-        }
-    //Player hand
-        cout << "\n\n" << *iter << "'s current hand:\n\t";
-        for(
-            size_t i(m_player_handler->player(*iter).hand_size());
-            i > 0;
-            --i
-        ){
-            cout
-                << m_player_handler->player(*iter).card(i-1)->name()
-                << (i != 1 ? ", " : "")
-            ;
-        }
-        if(
-            m_player_handler->player(*iter).hand_value() == k_blackjack &&
-            m_player_handler->player(*iter).hand_size() == 2
-        ) cout << "\nBlack Jack!\n";
+        //Dealer hand
+            cout << "\nDealer's current hand:\n\tHidden, ";
+            for(
+                size_t i(m_player_handler->dealer().hand_size(hand)-1);
+                i > 0;
+                --i
+            ){
+                cout
+                    << m_player_handler->dealer().card(i-1, hand)->name()
+                    << (i != 1 ? ", " : "")
+                ;
+            }
+        //Player hand
+            cout << "\n\n" << *iter << "'s current hand:\n\t";
+            for(
+                size_t i(m_player_handler->hand_size(*iter, hand));
+                i > 0;
+                --i
+            ){
+                cout
+                    << m_player_handler->card(i-1, *iter, hand)->name()
+                    << (i != 1 ? ", " : "")
+                ;
+            }
+            if(
+                m_player_handler->hand_value(*iter, hand) == k_blackjack &&
+                m_player_handler->hand_size(*iter, hand) == 2
+            ) cout << "\nBlack Jack!\n";
 
-    //Now choose what to do
-        this->choose_action(*iter);
-        
-    //Display Player hand updated
-        cout << "\n" << *iter << "'s current hand:\n\t";
-        for(
-            size_t i(m_player_handler->player(*iter).hand_size());
-            i > 0;
-            --i
-        ){
-            cout
-                << m_player_handler->player(*iter).card(i-1)->name()
-                << (i != 1 ? ", " : "")
-            ;
+        //Now choose what to do
+            this->choose_action(*iter, hand);
         }
-
         cout << "\n\nPress enter to start the next player's turn.";
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 
     if(m_player_handler->players_left() > 0)
-        return m_player_handler->dealer_hit();
-    else
-        return true;
+        while(!m_player_handler->dealer_hit());
 }
 
 void BJGame_Flow_Handler::start(){
@@ -117,6 +107,10 @@ void BJGame_Flow_Handler::reset()
 
 bool BJGame_Flow_Handler::display_round_end(){
     std::cout << "\nRound over!\n";
+std::cout << "\t CHECKER: ";
+for(const auto& i : m_names)
+    std::cout << i << ", ";
+std::cout << '\n';
 //Dealer hand
     std::cout << "\nDealer's hand:\n\t";
     for(
@@ -160,14 +154,9 @@ bool BJGame_Flow_Handler::display_round_end(){
                 break;
             }else if(choice == "yes")
                 break;
-            else if(
-                choice == "no" &&
-                m_player_handler->player(*iter).money() == 0
-            ){
+            else if(choice == "no"){
                 m_player_handler->erase_player(*iter);
-                break;
-            }else if(choice == "no"){
-                m_player_handler->remove_player(*iter);
+                --(iter = m_names.erase(iter));
                 break;
             }else
                 cout << "Unrecognised command. Please try again.";
@@ -202,17 +191,11 @@ void BJGame_Flow_Handler::choose_action(
         }else if(choice == k_hit){
             std::string subchoice("yes");
             while(subchoice == "yes"){
-                m_player_handler->hit(name);
+                m_player_handler->hit(name, hand_index);
                 cout
                     << "You drew a "
                     << m_player_handler
-                        ->  player(name)
-                        .   card(
-                                m_player_handler
-                                ->  player(name)
-                                .   hand_size(hand_index)-1
-                            )
-                        ->  name()
+                        -> last_card(name, hand_index) -> name()
                 << '\n';
                 if(m_player_handler->out(name)){
                     cout << "BUST!";
@@ -227,13 +210,7 @@ void BJGame_Flow_Handler::choose_action(
             cout
                 << "You drew a "
                 << m_player_handler
-                    ->  player(name)
-                    .   card(
-                            m_player_handler
-                            ->  player(name)
-                            .   hand_size(hand_index)-1
-                        )
-                    ->  name()
+                    -> last_card(name, hand_index) -> name()
             << '\n';
             if(m_player_handler->out(name))
                 cout << "BUST!";

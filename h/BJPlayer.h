@@ -19,6 +19,7 @@ class BJPlayer{
             size_t card_index = 0,
             size_t hand_index = 0
         )const;
+        Deck::Card_t last_card(size_t hand_index = 0)const;
         size_t hand_value(size_t hand_index = 0)const;
     //Modifiers
         void add_card(const Deck::Card_t&, size_t hand_index = 0);

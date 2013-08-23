@@ -27,8 +27,16 @@ class BJPlayer_Handler{
     //Read-only
         size_t players_left()const;
         BJPlayer player(Name = "")const;
+        bool player_exists(Name)const;
         size_t hand_size(Name = "", size_t hand_index = 0)const;
         size_t hand_count(Name = "")const;
+        size_t hand_value(Name = "", size_t hand_index = 0)const;
+        Deck::Card_t card(
+            size_t card_index = 0,
+            Name = "",
+            size_t hand_index = 0
+        )const;
+        Deck::Card_t last_card(Name = "", size_t hand_index = 0)const;
         bool out(Name = "")const;
         BJPlayer::Money pot(Name = "", size_t hand_index = 0)const;
         const BJPlayer& dealer()const;
@@ -41,7 +49,7 @@ class BJPlayer_Handler{
         void deal();
         void place_bet(Name = "", BJPlayer::Money = k_default_bet);
             //Return whether or not the player's hand is a bust
-        bool hit(Name = "");
+        bool hit(Name = "", size_t hand_index = 0);
             //Return whether or not dealer has exceeded maximum yet
         bool dealer_hit();
         void surrender(Name = "");
@@ -72,8 +80,12 @@ class BJPlayer_Handler{
         );
     //Helpers
         void arbitrary_shuffle();
+            //Returns whether or not the key is valid, i.e. player exists
         template <class Container>
             bool check_key(Name&, const Container&)const;
+            //Need to centralize transfer system
+        template <class Mapped, typename Key>
+            void transfer_item(Mapped& src, Mapped& dest, Key key);
     private:
         BJPlayer                            m_dealer;
         std::map<Name, BJPlayer>

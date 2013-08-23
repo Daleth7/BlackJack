@@ -9,7 +9,7 @@ class BJGame_Flow_Handler{
             //Return whether or not the dealer has reached the maximum
             //  or not; or returns if there are no more players with
             //  turns.
-        bool play_turn();
+        void play_turn();
         void start();
         void reset();
             //Return whether or not there is still a player
@@ -26,7 +26,7 @@ class BJGame_Flow_Handler{
         );
     private:
         std::shared_ptr<BJPlayer_Handler>       m_player_handler;
-        const std::list<BJPlayer_Handler::Name> m_names;
+        std::list<BJPlayer_Handler::Name>       m_names;
 
         static constexpr size_t                 k_blackjack = 21;
 };

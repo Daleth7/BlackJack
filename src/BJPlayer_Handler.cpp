@@ -13,6 +13,8 @@ BJPlayer BJPlayer_Handler::player(Name key)const{
         return m_out_players.at(key);
     else return BJPlayer(0);
 }
+bool BJPlayer_Handler::player_exists(Name key)const
+    {return check_key(key, m_players) || check_key(key, m_out_players);}
 size_t BJPlayer_Handler::hand_size(Name key, size_t hand_index)const{
     if(!check_key(key, m_players)) return 0;
     else return m_players.at(key).hand_size(hand_index);
@@ -20,6 +22,28 @@ size_t BJPlayer_Handler::hand_size(Name key, size_t hand_index)const{
 size_t BJPlayer_Handler::hand_count(Name key)const{
     if(!check_key(key, m_players)) return 0;
     else return m_players.at(key).hand_count();
+}
+size_t BJPlayer_Handler::hand_value(
+    Name key,
+    size_t hand_index
+)const{
+    if(!check_key(key, m_players)) return 0;
+    return m_players.at(key).hand_value(hand_index);
+}
+Deck::Card_t BJPlayer_Handler::card(
+    size_t card_index,
+    Name key,
+    size_t hand_index
+)const{
+    if(!check_key(key, m_players)) return nullptr;
+    return m_players.at(key).card(card_index, hand_index);
+}
+Deck::Card_t BJPlayer_Handler::last_card(
+    Name key,
+    size_t hand_index
+)const{
+    if(!check_key(key, m_players)) return nullptr;
+    return m_players.at(key).last_card(hand_index);
 }
 bool BJPlayer_Handler::out(Name key)const{
     if(key.empty() && m_players.size() == 0) return true;
@@ -87,12 +111,11 @@ void BJPlayer_Handler::place_bet(Name key, BJPlayer::Money amount){
     if(!check_key(key, m_players)) return;
     m_pots[key].push_back(m_players[key].bet(amount));
 }
-bool BJPlayer_Handler::hit(Name key){
+bool BJPlayer_Handler::hit(Name key, size_t hand_index){
     if(!check_key(key, m_players)) return false;
-    m_players[key].add_card(m_deck->draw());
-    if(m_players[key].hand_value() > k_blackjack){
-        m_out_players.insert(std::make_pair(key, m_players[key]));
-        m_players.erase(key);
+    m_players[key].add_card(m_deck->draw(), hand_index);
+    if(m_players[key].hand_value(hand_index) > k_blackjack){
+        this->transfer_item(m_players, m_out_players, key);
         return true;
     }
     return false;
@@ -107,10 +130,8 @@ bool BJPlayer_Handler::dealer_hit(){
 void BJPlayer_Handler::surrender(Name key){
     if(!check_key(key, m_players)) return;
     m_players[key].clear_hand();
-    if(m_players[key].hand_count() == 1){
-        m_out_players.insert(std::make_pair(key, m_players[key]));
-        m_players.erase(key);
-    }
+    if(m_players[key].hand_count() == 1)
+        this->transfer_item(m_players, m_out_players, key);
 }
 void BJPlayer_Handler::double_down(Name key, size_t hand_index){
     if(
@@ -121,10 +142,8 @@ void BJPlayer_Handler::double_down(Name key, size_t hand_index){
     m_players[key].add_card(m_deck->draw(), hand_index);
     m_pots[key][hand_index] += additional_pot;
     m_double_downed[key].push_back(hand_index);
-    if(m_players[key].hand_value(hand_index) > k_blackjack){
-        m_out_players.insert(std::make_pair(key, m_players[key]));
-        m_players.erase(key);
-    }
+    if(m_players[key].hand_value(hand_index) > k_blackjack)
+        this->transfer_item(m_players, m_out_players, key);
 }
 
 void BJPlayer_Handler::calculate_winner(){
@@ -172,14 +191,11 @@ void BJPlayer_Handler::calculate_winner(){
 }
 void BJPlayer_Handler::remove_player(Name key){
     if(!check_key(key, m_players)) return;
-    m_out_players.insert(std::make_pair(key, m_players[key]));
-    m_players.erase(key);
+    this->transfer_item(m_players, m_out_players, key);
 }
 void BJPlayer_Handler::erase_player(Name key){
-    if(
-        !check_key(key, m_players) &&
-        m_players[key].money() == 0
-    ) m_players.erase(key);
+    if(!check_key(key, m_players))
+        m_players.erase(key);
     else if(!check_key(key, m_out_players))
         m_out_players.erase(key);
 }
@@ -199,8 +215,7 @@ void BJPlayer_Handler::return_player(
 ){
     if(!check_key(key, m_out_players)) return;
     m_out_players[key].add_money(newamount);
-    m_players.insert(std::make_pair(key, m_out_players[key]));
-    m_out_players.erase(key);
+    this->transfer_item(m_out_players, m_players, key);
 }
 
 void BJPlayer_Handler::arbitrary_shuffle(){
