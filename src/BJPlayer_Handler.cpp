@@ -42,8 +42,11 @@ Deck::Card_t BJPlayer_Handler::last_card(
     Name key,
     size_t hand_index
 )const{
-    if(!check_key(key, m_players)) return nullptr;
-    return m_players.at(key).last_card(hand_index);
+    if(check_key(key, m_players))
+        return m_players.at(key).last_card(hand_index);
+    else if(check_key(key, m_out_players))
+        return m_out_players.at(key).last_card(hand_index);
+    else return nullptr;
 }
 bool BJPlayer_Handler::out(Name key)const{
     if(key.empty() && m_players.size() == 0) return true;
@@ -87,6 +90,7 @@ void BJPlayer_Handler::reset(){
         m_out_players.begin(), m_out_players.end(),
         std::inserter(m_players, m_players.end())
     );
+    m_out_players.clear();
     for(auto iter(m_players.begin()); iter != m_players.end(); ++iter)
         iter->second = BJPlayer(k_starting_amount);
     m_deck->reset();
@@ -188,15 +192,17 @@ void BJPlayer_Handler::calculate_winner(){
     m_pots.clear();
     m_dealer.clear_hand();
     m_double_downed.clear();
+    m_out_players.clear();
 }
 void BJPlayer_Handler::remove_player(Name key){
     if(!check_key(key, m_players)) return;
     this->transfer_item(m_players, m_out_players, key);
 }
+
 void BJPlayer_Handler::erase_player(Name key){
-    if(!check_key(key, m_players))
+    if(check_key(key, m_players))
         m_players.erase(key);
-    else if(!check_key(key, m_out_players))
+    else if(check_key(key, m_out_players))
         m_out_players.erase(key);
 }
 void BJPlayer_Handler::add_player(
