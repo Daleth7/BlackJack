@@ -152,18 +152,18 @@
 	<utility>
 	<algorithm>
 
-1377309997 c:\users\depes\documents\github\blackjack\h\bjgame_flow_handler.h
+1377383664 c:\users\depes\documents\github\blackjack\h\bjgame_flow_handler.h
 	"BJPlayer_Handler.h"
 	"BJGame_Flow_Handler.inl"
 
-1377243748 c:\users\depes\documents\github\blackjack\h\bjplayer_handler.h
+1380499357 c:\users\depes\documents\github\blackjack\h\bjplayer_handler.h
 	"BJPlayer.h"
 	<map>
 	<memory>
 	<list>
 	"BJPlayer_Handler.inl"
 
-1377215479 c:\users\depes\documents\github\blackjack\h\bjplayer.h
+1377382795 c:\users\depes\documents\github\blackjack\h\bjplayer.h
 	"Deck.h"
 	<vector>
 
@@ -189,13 +189,13 @@
 
 1377310007 c:\users\depes\documents\github\blackjack\src\bjgame_flow_handler.inl
 
-1377310017 source:c:\users\depes\documents\github\blackjack\src\bjgame_flow_handler.cpp
+1380499496 source:c:\users\depes\documents\github\blackjack\src\bjgame_flow_handler.cpp
 	"BJGame_Flow_Handler.h"
 	<cctype>
 	<iostream>
 	<limits>
 
-1377215640 source:c:\users\depes\documents\github\blackjack\src\bjplayer.cpp
+1377383164 source:c:\users\depes\documents\github\blackjack\src\bjplayer.cpp
 	"BJPlayer.h"
 
 1377141338 source:c:\users\depes\documents\github\blackjack\src\card.cpp
@@ -220,7 +220,7 @@
 1376553290 c:\users\depes\documents\github\blackjack\h\unodeckfactory.h
 	"DeckFactory.h"
 
-1377310618 source:c:\users\depes\documents\github\blackjack\src\bjplayer_handler.cpp
+1380499325 source:c:\users\depes\documents\github\blackjack\src\bjplayer_handler.cpp
 	"BJPlayer_Handler.h"
 	"SuitDeckFactory.h"
 	<random>

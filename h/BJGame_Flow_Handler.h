@@ -22,7 +22,7 @@ class BJGame_Flow_Handler{
     //Helpers
         void choose_action(
             const BJPlayer_Handler::Name&,
-            size_t hand_index = 0
+            size_t& hand_index
         );
     private:
         std::shared_ptr<BJPlayer_Handler>       m_p_handle;

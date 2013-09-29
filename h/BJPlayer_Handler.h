@@ -31,18 +31,18 @@ class BJPlayer_Handler{
         size_t hand_size(Name = "", size_t hand_index = 0)const;
         size_t hand_count(Name = "")const;
         size_t hand_value(Name = "", size_t hand_index = 0)const;
-        Deck::Card_t card(
+        Deck::Card_ptr card(
             size_t card_index = 0,
             Name = "",
             size_t hand_index = 0
         )const;
-        Deck::Card_t last_card(Name = "", size_t hand_index = 0)const;
+        Deck::Card_ptr last_card(Name = "", size_t hand_index = 0)const;
         bool out(Name = "")const;
         BJPlayer::Money pot(Name = "", size_t hand_index = 0)const;
         const BJPlayer& dealer()const;
         bool double_downed(Name = "", size_t hand_index = 0)const;
         size_t count_double_downed(Name = "")const;
-
+    //Player Actions
             //Reset everything from deck to players' money
         void reset();
             //Start of a round; deals two cards to each player
@@ -54,6 +54,9 @@ class BJPlayer_Handler{
         bool dealer_hit();
         void surrender(Name = "");
         void double_down(Name = "", size_t hand_index = 0);
+            //Return whether or not the split was successful
+        bool split(Name = "", size_t hand_index = 0);
+    //Other modifiers
             //Clean up cards and award pots to the winners
         void calculate_winner();
         void remove_player(Name = "");
@@ -66,7 +69,7 @@ class BJPlayer_Handler{
             Name = "",
             BJPlayer::Money = k_default_starting_amount
         );
-
+    //Constructors and destructor
         BJPlayer_Handler(const BJPlayer_Handler&)               = delete;
         BJPlayer_Handler(BJPlayer_Handler&&)                    = default;
         BJPlayer_Handler& operator=(const BJPlayer_Handler&)    = delete;

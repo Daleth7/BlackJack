@@ -89,6 +89,8 @@ void BJGame_Flow_Handler::start(){
             ;
             BJPlayer::Money newamount(0);
             read_number(newamount);
+            if(newamount == 0)
+                continue;
             m_p_handle->add_player(newname, newamount);
             m_names.push_back(newname);
         }
@@ -171,7 +173,7 @@ bool BJGame_Flow_Handler::display_round_end(){
 //Helpers
 void BJGame_Flow_Handler::choose_action(
     const BJPlayer_Handler::Name& name,
-    size_t hand_index
+    size_t& hand
 ){
     using namespace std;
     cout << '\n' << name << ", what would you like to do?";
@@ -180,6 +182,7 @@ void BJGame_Flow_Handler::choose_action(
             << "\nType \"hit\", "
             << "\"double down\", "
             << "\"surrender\", "
+            << "\"split\", "
             << "or \"stand\": "
         ;
         std::string choice("");
@@ -193,11 +196,11 @@ void BJGame_Flow_Handler::choose_action(
         }else if(choice == k_hit){
             std::string subchoice("yes");
             while(subchoice == "yes"){
-                m_p_handle->hit(name, hand_index);
+                m_p_handle->hit(name, hand);
                 cout
                     << "You drew a "
                     << m_p_handle
-                        -> last_card(name, hand_index) -> name()
+                        -> last_card(name, hand) -> name()
                 << '\n';
                 if(m_p_handle->out(name)){
                     cout << "BUST!";
@@ -212,11 +215,30 @@ void BJGame_Flow_Handler::choose_action(
             cout
                 << "You drew a "
                 << m_p_handle
-                    -> last_card(name, hand_index) -> name()
+                    -> last_card(name, hand) -> name()
             << '\n';
             if(m_p_handle->out(name))
                 cout << "BUST!";
             break;
+        }else if(choice == k_split){
+            if(!m_p_handle->split(name, hand--)){
+                cout << "Cannot split";
+                ++hand;
+            }
+        /*
+            if(m_p_handle->hand_size(name, hand) != 2)
+                cout << "Cannot split.";
+            size_t
+                value1(m_p_handle->card(0, name, hand)->value),
+                value2(m_p_handle->card(1, name, hand)->value)
+            ;
+            if(value1 > 10) value1 = 10;
+            if(value2 > 10) value2 = 10;
+            if(value1 == value2){
+                m_p_handle->split(name, hand--);
+                break;
+            }else cout << "Cannot split.";
+        */
         }else if(choice == k_stand)
             break;
         else

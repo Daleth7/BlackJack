@@ -8,7 +8,7 @@ size_t BJPlayer::hand_size(size_t hand_index)const{
 }
 size_t BJPlayer::hand_count()const
     {return m_hands.size();}
-Deck::Card_t BJPlayer::card(
+Deck::Card_ptr BJPlayer::card(
     size_t card_index,
     size_t hand_index
 )const{
@@ -18,7 +18,7 @@ Deck::Card_t BJPlayer::card(
     ) return nullptr;
     return m_hands[hand_index][card_index];
 }
-Deck::Card_t BJPlayer::last_card(size_t hand_index)const{
+Deck::Card_ptr BJPlayer::last_card(size_t hand_index)const{
     if(hand_index >= m_hands.size()) return nullptr;
     return m_hands.at(hand_index).back();
 }
@@ -45,7 +45,7 @@ size_t BJPlayer::hand_value(size_t hand_index)const{
 }
 
 void BJPlayer::add_card(
-    const Deck::Card_t& newcard,
+    const Deck::Card_ptr& newcard,
     size_t hand_index
 ){
     if(hand_index >= m_hands.size()) return;
@@ -70,24 +70,32 @@ BJPlayer::Money BJPlayer::bet(Money request){
 }
 void BJPlayer::add_money(Money newmoney)
     {m_money += newmoney;}
-void BJPlayer::split(
+bool BJPlayer::split(
     size_t hand_index,
-    Deck::Card_t newcard1,
-    Deck::Card_t newcard2
+    Deck::Card_ptr newcard1,
+    Deck::Card_ptr newcard2
 ){
     if(
         hand_index >= m_hands.size() ||
-        m_hands[hand_index].size() != 2 ||
-        m_hands[hand_index].front()->value
-            != m_hands[hand_index].back()->value 
-    ) return;
+        m_hands[hand_index].size() != 2
+    ) return false;
+    auto
+        v1(m_hands[hand_index].front()->value),
+        v2(m_hands[hand_index].back()->value)
+    ;
+    if(v1 > 10) v1 = 10;
+    if(v2 > 10) v2 = 10;
+
+    if(v1 != v2) return false;
+
     m_hands.insert(
-        m_hands.begin()+hand_index+1,
+        m_hands.begin()+hand_index,
         {m_hands[hand_index].back()}
     );
-    m_hands[hand_index].pop_back();
+    m_hands[hand_index+1].pop_back();
     if(newcard1 != nullptr) m_hands[hand_index].push_back(newcard1);
     if(newcard2 != nullptr) m_hands[hand_index+1].push_back(newcard2);
+    return true;
 }
 
 BJPlayer::BJPlayer(Money starting_amount)

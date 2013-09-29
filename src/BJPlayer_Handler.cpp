@@ -30,7 +30,7 @@ size_t BJPlayer_Handler::hand_value(
     if(!check_key(key, m_players)) return 0;
     return m_players.at(key).hand_value(hand_index);
 }
-Deck::Card_t BJPlayer_Handler::card(
+Deck::Card_ptr BJPlayer_Handler::card(
     size_t card_index,
     Name key,
     size_t hand_index
@@ -38,7 +38,7 @@ Deck::Card_t BJPlayer_Handler::card(
     if(!check_key(key, m_players)) return nullptr;
     return m_players.at(key).card(card_index, hand_index);
 }
-Deck::Card_t BJPlayer_Handler::last_card(
+Deck::Card_ptr BJPlayer_Handler::last_card(
     Name key,
     size_t hand_index
 )const{
@@ -148,6 +148,17 @@ void BJPlayer_Handler::double_down(Name key, size_t hand_index){
     m_double_downed[key].push_back(hand_index);
     if(m_players[key].hand_value(hand_index) > k_blackjack)
         this->transfer_item(m_players, m_out_players, key);
+}
+bool BJPlayer_Handler::split(Name key, size_t hand_index){
+    if(
+        !check_key(key, m_players) ||
+        !m_players[key].split(hand_index, m_deck->draw(), m_deck->draw())
+    ) return false;
+    m_pots[key].insert(
+        m_pots[key].begin() + hand_index + 1,
+        m_pots[key][hand_index]
+    );
+    return true;
 }
 
 void BJPlayer_Handler::calculate_winner(){
