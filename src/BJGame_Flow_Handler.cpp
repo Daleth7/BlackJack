@@ -221,6 +221,8 @@ void BJGame_Flow_Handler::choose_action(
                 cout << "BUST!";
             break;
         }else if(choice == k_split){
+                //decrement hand so next iteration goes back
+                //  to the same hand
             if(!m_p_handle->split(name, hand--)){
                 cout << "Cannot split";
                 ++hand;
