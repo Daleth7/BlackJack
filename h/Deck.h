@@ -9,8 +9,8 @@
 
 class Deck{
     public:
-        using Card_t    = std::shared_ptr<Card>;
-        using Deck_t    = std::list<Card_t>;
+        using Card_ptr    = std::shared_ptr<Card>;
+        using Deck_t    = std::list<Card_ptr>;
         using RandGen   = std::mt19937;
     //Read-Only
         size_t size()const;
@@ -18,7 +18,7 @@ class Deck{
         const RandGen& generator()const;
         bool always_shuffle()const;
     //Other methods
-        Card_t draw();
+        Card_ptr draw();
         //by default places card at the bottom of the deck
         void insert(const Card&);
         //This accepts iterators pointing to Card

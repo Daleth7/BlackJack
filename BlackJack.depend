@@ -156,18 +156,18 @@
 	"BJPlayer_Handler.h"
 	"BJGame_Flow_Handler.inl"
 
-1380499357 c:\users\depes\documents\github\blackjack\h\bjplayer_handler.h
+1380500316 c:\users\depes\documents\github\blackjack\h\bjplayer_handler.h
 	"BJPlayer.h"
 	<map>
 	<memory>
 	<list>
 	"BJPlayer_Handler.inl"
 
-1377382795 c:\users\depes\documents\github\blackjack\h\bjplayer.h
+1380500312 c:\users\depes\documents\github\blackjack\h\bjplayer.h
 	"Deck.h"
 	<vector>
 
-1376598961 c:\users\depes\documents\github\blackjack\h\deck.h
+1380514940 c:\users\depes\documents\github\blackjack\h\deck.h
 	"Card.h"
 	<list>
 	<random>

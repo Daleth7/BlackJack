@@ -13,9 +13,9 @@ bool Deck::always_shuffle()const
     {return m_always_shuffle;}
 
 //Other methods
-Deck::Card_t Deck::draw(){
+Deck::Card_ptr Deck::draw(){
     if(m_deck.size() == 0) return nullptr;
-    Card_t toreturn(m_deck.back());
+    Card_ptr toreturn(m_deck.back());
     m_deck.pop_back();
     m_trash.push_back(toreturn);
     if(m_always_shuffle) this->shuffle();
@@ -65,7 +65,7 @@ void Deck::return_card(size_t number_of_cards){
     if(m_always_shuffle) this->shuffle();
 }
 void Deck::sort()
-    {m_deck.sort([](Card_t f, Card_t s){return (*f) < (*s);});}
+    {m_deck.sort([](Card_ptr f, Card_ptr s){return (*f) < (*s);});}
 
 #include <chrono>
 size_t get_seed(){

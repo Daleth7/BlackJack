@@ -3,10 +3,10 @@
 
 Deck* UnoDeckFactory::generate(){
     Deck::Deck_t new_deck{
-        Deck::Card_t(std::make_shared<Card>(Card(0, Uno_t::Blue))),
-        Deck::Card_t(std::make_shared<Card>(Card(0, Uno_t::Red))),
-        Deck::Card_t(std::make_shared<Card>(Card(0, Uno_t::Green))),
-        Deck::Card_t(std::make_shared<Card>(Card(0, Uno_t::Yellow)))
+        Deck::Card_ptr(std::make_shared<Card>(Card(0, Uno_t::Blue))),
+        Deck::Card_ptr(std::make_shared<Card>(Card(0, Uno_t::Red))),
+        Deck::Card_ptr(std::make_shared<Card>(Card(0, Uno_t::Green))),
+        Deck::Card_ptr(std::make_shared<Card>(Card(0, Uno_t::Yellow)))
     };
     for(size_t i(0); i < 2; ++i){
         new_deck.push_back(std::make_shared<Card>(Card(UnoValue::Skip, Uno_t::Blue))),
@@ -37,7 +37,7 @@ Deck* UnoDeckFactory::generate(){
         new_deck.push_back(std::make_shared<Card>(Card(i, Uno_t::Yellow)));
         new_deck.push_back(std::make_shared<Card>(Card(i, Uno_t::Yellow)));
     }
-    new_deck.sort([](Deck::Card_t f, Deck::Card_t s){return (*f) < (*s);});
+    new_deck.sort([](Deck::Card_ptr f, Deck::Card_ptr s){return (*f) < (*s);});
 
     return new Deck(new_deck.begin(), new_deck.end());
 }

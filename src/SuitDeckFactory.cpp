@@ -12,7 +12,7 @@ Deck* SuitDeckFactory::generate(){
         new_deck.push_back(std::make_shared<Card>(Card(i, Suit_t::Diamonds)));
         new_deck.push_back(std::make_shared<Card>(Card(i, Suit_t::Clubs)));
     }
-    new_deck.sort([](const Deck::Card_t& f, const Deck::Card_t& s){return (*f) < (*s);});
+    new_deck.sort([](const Deck::Card_ptr& f, const Deck::Card_ptr& s){return (*f) < (*s);});
     return new Deck(new_deck.begin(), new_deck.end());
 }
 Deck* SuitDeckFactory::generate_w_joker(){
