@@ -1,0 +1,104 @@
+[10/23/13 15:56:59] switch_log_state(): Logging started.
+[10/23/13 15:57:02] choose_action(): Player chose: "hit"
+[10/23/13 15:57:02] choose_action(): You drew a 7 of Spades
+
+[10/23/13 15:57:03] choose_action(): Player hit again? no
+[10/23/13 15:57:04] play_turn(): 
+Dealer's current hand:
+	Hidden, 5 of Clubs
+[10/23/13 15:57:04] play_turn(): 
+
+t's current hand:
+	7 of Diamonds, Jack of Spades
+
+[10/23/13 15:57:04] play_turn(): t is making a decision...
+[10/23/13 15:57:06] choose_action(): Player chose: "hit"
+[10/23/13 15:57:06] choose_action(): You drew a King of Clubs
+
+[10/23/13 15:57:06] choose_action(): Bust!
+[10/23/13 15:57:07] play_turn(): 
+Dealer's current hand:
+	Hidden, 5 of Clubs
+[10/23/13 15:57:07] play_turn(): 
+
+dj's current hand:
+	10 of Clubs, 6 of Hearts
+
+[10/23/13 15:57:07] play_turn(): dj is making a decision...
+[10/23/13 15:57:08] choose_action(): Player chose: "hit"
+[10/23/13 15:57:08] choose_action(): You drew a 7 of Hearts
+
+[10/23/13 15:57:08] choose_action(): Bust!
+[10/23/13 15:57:08] play_turn(): Players left:1
+[10/23/13 15:57:08] play_turn(): No players left to play.
+[10/23/13 15:57:08] display_round_end(): Round over.
+[10/23/13 15:57:08] display_round_end(): 
+Dealer's hand:
+	3 of Spades, 8 of Diamonds, 3 of Clubs, 5 of Clubs
+[10/23/13 15:57:08] display_round_end(): 
+e, you have $213.
+Would you like to play again, e?
+[10/23/13 15:57:11] display_round_end(): Did player want to play again? yes
+[10/23/13 15:57:11] display_round_end(): e currently has:213
+[10/23/13 15:57:11] display_round_end(): 
+e, you have $213.
+Would you like to play again, e?
+t, you have $1000.
+Would you like to play again, t?
+[10/23/13 15:57:12] display_round_end(): Did player want to play again? no
+[10/23/13 15:57:12] display_round_end(): t has opted out.
+[10/23/13 15:57:12] display_round_end(): 
+e, you have $213.
+Would you like to play again, e?
+t, you have $1000.
+Would you like to play again, t?
+dj, you have $201.
+Would you like to play again, dj?
+[10/23/13 15:57:20] display_round_end(): Did player want to play again? yes
+[10/23/13 15:57:20] display_round_end(): dj currently has:201
+[10/23/13 15:57:30] start(): e placed a bet.
+[10/23/13 15:57:32] start(): 12
+[10/23/13 15:57:32] start(): dj placed a bet.
+[10/23/13 15:57:33] start(): 12
+[10/23/13 15:57:33] play_turn(): 
+Dealer's current hand:
+	Hidden, 10 of Diamonds
+[10/23/13 15:57:33] play_turn(): 
+
+e's current hand:
+	Ace of Hearts, 6 of Clubs
+
+[10/23/13 15:57:33] play_turn(): e is making a decision...
+[10/23/13 15:57:35] choose_action(): Player chose: "hit"
+[10/23/13 15:57:35] choose_action(): You drew a 4 of Spades
+
+[10/23/13 15:57:38] choose_action(): Player hit again? no
+[10/23/13 15:57:39] play_turn(): 
+Dealer's current hand:
+	Hidden, 10 of Diamonds
+[10/23/13 15:57:39] play_turn(): 
+
+dj's current hand:
+	8 of Hearts, 9 of Clubs
+
+[10/23/13 15:57:39] play_turn(): dj is making a decision...
+[10/23/13 15:57:44] choose_action(): Player chose: "surrender"
+[10/23/13 15:57:44] play_turn(): Players left:1
+[10/23/13 15:57:44] play_turn(): No players left to play.
+[10/23/13 15:57:44] display_round_end(): Round over.
+[10/23/13 15:57:44] display_round_end(): 
+Dealer's hand:
+	5 of Spades, 9 of Spades, 10 of Diamonds
+[10/23/13 15:57:44] display_round_end(): 
+e, you have $225.
+Would you like to play again, e?
+[10/23/13 15:57:46] display_round_end(): Did player want to play again? no
+[10/23/13 15:57:46] display_round_end(): e has opted out.
+[10/23/13 15:57:46] display_round_end(): 
+e, you have $225.
+Would you like to play again, e?
+dj, you have $189.
+Would you like to play again, dj?
+[10/23/13 15:57:47] display_round_end(): Did player want to play again? no
+[10/23/13 15:57:47] display_round_end(): dj has opted out.
+[10/23/13 15:57:47] switch_log_state(): Logging ended.

@@ -143,7 +143,7 @@
 
 1376728009 c:\users\depes\dropbox\programming\blackjack\src\bjgame_flow_handler.inl
 
-1377243940 source:c:\users\depes\documents\github\blackjack\main.cpp
+1382559176 source:c:\users\depes\documents\github\blackjack\main.cpp
 	"BJGame_Flow_Handler.h"
 	<memory>
 	<iostream>
@@ -152,15 +152,16 @@
 	<utility>
 	<algorithm>
 
-1377383664 c:\users\depes\documents\github\blackjack\h\bjgame_flow_handler.h
+1380875569 c:\users\depes\documents\github\blackjack\h\bjgame_flow_handler.h
 	"BJPlayer_Handler.h"
 	"BJGame_Flow_Handler.inl"
 
-1380500316 c:\users\depes\documents\github\blackjack\h\bjplayer_handler.h
+1382420927 c:\users\depes\documents\github\blackjack\h\bjplayer_handler.h
 	"BJPlayer.h"
 	<map>
 	<memory>
 	<list>
+	<vector>
 	"BJPlayer_Handler.inl"
 
 1380500312 c:\users\depes\documents\github\blackjack\h\bjplayer.h
@@ -174,7 +175,7 @@
 	<memory>
 	"Deck.inl"
 
-1377141359 c:\users\depes\documents\github\blackjack\h\card.h
+1382316697 c:\users\depes\documents\github\blackjack\h\card.h
 	<string>
 
 1376596532 c:\users\depes\documents\github\blackjack\src\deck.inl
@@ -189,41 +190,54 @@
 
 1377310007 c:\users\depes\documents\github\blackjack\src\bjgame_flow_handler.inl
 
-1380499496 source:c:\users\depes\documents\github\blackjack\src\bjgame_flow_handler.cpp
+1382559786 source:c:\users\depes\documents\github\blackjack\src\bjgame_flow_handler.cpp
 	"BJGame_Flow_Handler.h"
 	<cctype>
 	<iostream>
 	<limits>
+	<stdexcept>
+	"Basic_Logger.h"
+	<sstream>
+	<fstream>
 
-1377383164 source:c:\users\depes\documents\github\blackjack\src\bjplayer.cpp
+1380500310 source:c:\users\depes\documents\github\blackjack\src\bjplayer.cpp
 	"BJPlayer.h"
 
 1377141338 source:c:\users\depes\documents\github\blackjack\src\card.cpp
 	"Card.h"
 
-1376599030 source:c:\users\depes\documents\github\blackjack\src\deck.cpp
+1380514910 source:c:\users\depes\documents\github\blackjack\src\deck.cpp
 	"Deck.h"
 	<iterator>
 	<algorithm>
 	<chrono>
 	<functional>
 
-1376876829 source:c:\users\depes\documents\github\blackjack\src\suitdeckfactory.cpp
+1380514909 source:c:\users\depes\documents\github\blackjack\src\suitdeckfactory.cpp
 	"SuitDeckFactory.h"
 	"Deck.h"
 	<cstddef>
 
-1376596909 source:c:\users\depes\documents\github\blackjack\src\unodeckfactory.cpp
+1380514907 source:c:\users\depes\documents\github\blackjack\src\unodeckfactory.cpp
 	"UnoDeckFactory.h"
 	"Deck.h"
 
 1376553290 c:\users\depes\documents\github\blackjack\h\unodeckfactory.h
 	"DeckFactory.h"
 
-1380499325 source:c:\users\depes\documents\github\blackjack\src\bjplayer_handler.cpp
+1382420924 source:c:\users\depes\documents\github\blackjack\src\bjplayer_handler.cpp
 	"BJPlayer_Handler.h"
 	"SuitDeckFactory.h"
 	<random>
 	<chrono>
 	<algorithm>
+
+1382572542 c:\users\depes\documents\github\blackjack\h\basic_logger.h
+	<ostream>
+	<string>
+	"Basic_Logger.inl"
+
+1382572589 c:\users\depes\documents\github\blackjack\src\basic_logger.inl
+	<fstream>
+	<ctime>
 

@@ -6,16 +6,12 @@
 class BJGame_Flow_Handler{
     public:
         size_t players_left()const;
-            //Return whether or not the dealer has reached the maximum
-            //  or not; or returns if there are no more players with
-            //  turns.
         void play_turn();
         void start();
         void reset();
             //Return whether or not there is still a player
             //  who wants to play another round
         bool display_round_end();
-//        void draw();
         template <typename NameIter, typename MoneyIter>
         BJGame_Flow_Handler(NameIter, NameIter, MoneyIter);
     protected:

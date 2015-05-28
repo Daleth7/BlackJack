@@ -7,6 +7,7 @@ class Deck;
 #include <map>
 #include <memory>
 #include <list>
+#include <vector>
     //This class only manages calls to member functions and a couple
     //  other factors. Any functionality involving input or GUI will
     //  have to be handled via some other method.
@@ -58,7 +59,7 @@ class BJPlayer_Handler{
         bool split(Name = "", size_t hand_index = 0);
     //Other modifiers
             //Clean up cards and award pots to the winners
-        void calculate_winner();
+        void calculate_winnings();
         void remove_player(Name = "");
         void erase_player(Name = "");
         void add_player(

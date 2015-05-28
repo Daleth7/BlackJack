@@ -10,8 +10,8 @@ using std::cout;
 
 std::ostream& PrintDeck(Deck);
 
-std::istream& Read_line(std::string& dest, char delim = '\n');
-std::istream& Read_number(unsigned long long& dest);
+std::istream& read_line(std::string& dest, char delim = '\n');
+std::istream& read_number(unsigned long& dest);
 
 constexpr long double ver(1.0);
 
@@ -19,8 +19,8 @@ int main(){
     cout << std::fixed << std::setprecision(1) << "Welcome to Black Jack v" << ver << '!';
 
     cout << "\nHow many players will there be: ";
-    unsigned long long pcount(0);
-    Read_number(pcount);
+    unsigned long pcount(0);
+    read_number(pcount);
     std::pair<
         std::list<std::string>,
         std::list<unsigned long long>
@@ -29,16 +29,16 @@ int main(){
         std::string newname("");
         while(true){
             cout << "\nPlayer " << (pcount+1) << ", please enter your name: ";
-            Read_line(newname);
+            read_line(newname);
             if(std::find(
                 newplayers.first.begin(), newplayers.first.end(),
                 newname
             ) == newplayers.first.end()) break;
             cout << "\nName taken. Please enter in a different name.\n";
         }
-        unsigned long long samount(0);
+        unsigned long samount(0);
         cout << "\nNow enter your starting amount: $";
-        Read_number(samount);
+        read_number(samount);
         newplayers.first.push_back(newname);
         newplayers.second.push_back(samount);
     }
@@ -47,10 +47,14 @@ int main(){
         newplayers.first.begin(), newplayers.first.end(),
         newplayers.second.begin()
     );
-    do{
-        game.start();
-        game.play_turn();
-    }while(game.display_round_end());
+    try{
+        do{
+            game.start();
+            game.play_turn();
+        }while(game.display_round_end());
+    }catch(const std::exception& e){
+        cout << e.what();
+    }
 
     cout << std::fixed << std::setprecision(1) << "\nThank you for playing Black Jack v" << ver << "!\n";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -115,14 +119,14 @@ std::ostream& PrintDeck(Deck deck){
     return cout;
 }
 
-std::istream& Read_line(std::string& dest, char delim){
+std::istream& read_line(std::string& dest, char delim){
     std::getline(std::cin, dest, delim);
     return std::cin;
 }
 
-std::istream& Read_number(unsigned long long& dest){
+std::istream& read_number(unsigned long& dest){
     using namespace std;
-    while(!(std::cin >> dest)){
+    while(!(cin >> dest)){
         cin.clear();
         cout
             << "\nError. Not an acceptable number. "
@@ -131,5 +135,5 @@ std::istream& Read_number(unsigned long long& dest){
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    return std::cin;
+    return cin;
 }

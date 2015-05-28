@@ -71,13 +71,13 @@ namespace UnoValue{
 struct Card{
     std::string name()const;
 
-    inline constexpr Card(unsigned inValue, Suit_t inSuit)
+    Card(unsigned inValue, Suit_t inSuit)
         : value((inValue > 0 && inValue < SuitValue::King+1)
             ? inValue : SuitValue::Joker)
         , suit(inSuit)
         , cardtype(Card::SuitCard)
     {}
-    inline constexpr Card(unsigned inValue, Uno_t inColor)
+    Card(unsigned inValue, Uno_t inColor)
         : value(inValue < UnoValue::Wild_Draw_Four ? inValue : 0)
         , color(inColor)
         , cardtype(Card::UnoCard)

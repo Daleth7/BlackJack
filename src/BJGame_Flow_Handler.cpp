@@ -1,23 +1,37 @@
 #include "BJGame_Flow_Handler.h"
 
 #include <cctype>
-
 #include <iostream>
 #include <limits>
+#include <stdexcept>
 
-std::istream& read_line(std::string& dest, char delim = '\n');
-std::istream& read_number(unsigned long long& dest);
+#include "Basic_Logger.h"
 
-const std::string
-                    k_surrender("surrender"),
-                    k_hit("hit"),
-                    k_stand("stand"),
-                    k_double_down("double down"),
-                    k_split("split")
-;
+#define log_if(...)             \
+        if(log_enabled)         \
+            log(__VA_ARGS__)    \
+
+namespace{
+    std::istream& read_line(std::string& dest, char delim = '\n');
+    std::istream& read_number(unsigned long long& dest);
+
+    void switch_log_state();
+
+    const std::string
+                        k_surrender("surrender"),
+                        k_hit("hit"),
+                        k_stand("stand"),
+                        k_double_down("double down"),
+                        k_split("split"),
+                        k_switchlog("switch log")
+    ;
+
+    bool log_enabled(false);
+}
 
 size_t BJGame_Flow_Handler::players_left()const
     {return m_p_handle->players_left();}
+
 void BJGame_Flow_Handler::play_turn(){
     using namespace std;
     for(auto iter(m_names.begin()); iter != m_names.end(); ++iter){
@@ -31,35 +45,52 @@ void BJGame_Flow_Handler::play_turn(){
             ++hand
         ){
         //Dealer hand
-            cout << "\nDealer's current hand:\n\tHidden, ";
+            string hand_msg
+                ("\nDealer's current hand:\n\tHidden, ");
+
             for(
                 size_t i(m_p_handle->dealer().hand_size(hand)-1);
                 i > 0;
                 --i
             ){
-                cout
-                    << m_p_handle->dealer().card(i-1, hand)->name()
-                    << (i != 1 ? ", " : "")
+                if(m_p_handle->dealer().card(i-1, hand) == nullptr){
+                    const string deal_err("Error: Dealer with small hand.");
+                    if(log_enabled){
+                        log(deal_err);
+                        switch_log_state();
+                    }
+                    throw runtime_error(deal_err.c_str());
+                }
+                hand_msg
+                    += m_p_handle->dealer().card(i-1, hand)->name()
+                    + (i != 1 ? ", " : "")
                 ;
             }
+            cout << hand_msg;
+            log_if(hand_msg);
+
         //Player hand
-            cout << "\n\n" << *iter << "'s current hand:\n\t";
+            hand_msg.clear();
+            hand_msg += "\n\n" + *iter + "'s current hand:\n\t";
             for(
                 size_t i(m_p_handle->hand_size(*iter, hand));
                 i > 0;
                 --i
             ){
-                cout
-                    << m_p_handle->card(i-1, *iter, hand)->name()
-                    << (i != 1 ? ", " : "")
+                hand_msg
+                    += m_p_handle->card(i-1, *iter, hand)->name()
+                    + (i != 1 ? ", " : "")
                 ;
             }
             if(
                 m_p_handle->hand_value(*iter, hand) == k_blackjack &&
                 m_p_handle->hand_size(*iter, hand) == 2
-            ) cout << "\nBlack Jack!\n";
+            ) hand_msg += "\nBlack Jack!\n";
+            cout << hand_msg;
+            log_if(hand_msg + "\n");
 
         //Now choose what to do
+            log_if(*iter + " is making a decision...");
             this->choose_action(*iter, hand);
         }
         if(std::distance(iter, m_names.end()) != 1){
@@ -68,12 +99,17 @@ void BJGame_Flow_Handler::play_turn(){
         }
     }
 
-    if(m_p_handle->players_left() > 0)
+    if(m_p_handle->players_left() > 0){
         while(!m_p_handle->dealer_hit());
+        log_if("Players left:", m_p_handle->players_left());
+    }
+    log_if("No players left to play.");
 }
 
 void BJGame_Flow_Handler::start(){
+#ifndef DEBUG_MODE
     using namespace std;
+
     cout << "\nAre there any new players who wish to join?";
     std::string newname("");
     while(newname != "none"){
@@ -82,7 +118,11 @@ void BJGame_Flow_Handler::start(){
         cout << '\n';
         for(size_t i(0); i < newname.size(); ++i)
             ::tolower(newname[i]);
-        if(newname != "none"){
+
+        if(newname == k_switchlog)
+            switch_log_state();
+        else if(newname != "none"){
+            log_if("Added new player: " + newname);
             cout
                 << "Now enter your starting amount, " << newname
                 << "(0 to undo): $"
@@ -93,52 +133,68 @@ void BJGame_Flow_Handler::start(){
                 continue;
             m_p_handle->add_player(newname, newamount);
             m_names.push_back(newname);
+            log_if(newamount);
         }
     }
     cout << "\nTime to place your bets!";
     for(auto iter(m_names.begin()); iter != m_names.end(); ++iter){
         if(m_p_handle->out(*iter)) continue;
+        log_if(*iter + " placed a bet.");
         cout << '\n' << *iter << ", how much would you like to bet?\n";
         cout << "Type a whole number: $";
         BJPlayer::Money newbet(0);
         read_number(newbet);
+        log_if(newbet);
         m_p_handle->place_bet(*iter, newbet);
         cout << "\n";
     }
     m_p_handle->deal();
+#else
+    
+#endif
 }
 
 void BJGame_Flow_Handler::reset()
     {m_p_handle->reset();}
-
+#include <sstream>
 bool BJGame_Flow_Handler::display_round_end(){
     std::cout << "\nRound over!\n";
+    log_if("Round over.");
 //Dealer hand
-    std::cout << "\nDealer's hand:\n\t";
+    std::string msg("\nDealer's hand:\n\t");
     for(
         size_t i(m_p_handle->dealer().hand_size());
         i > 0;
         --i
     ){
-        std::cout
-            << m_p_handle->dealer().card(i-1)->name()
-            << (i != 1 ? ", " : "")
+        msg
+            += m_p_handle->dealer().card(i-1)->name()
+            + (i != 1 ? ", " : "")
         ;
     }
-    m_p_handle->calculate_winner();
+    std::cout << msg;
+    log_if(msg);
+
+    m_p_handle->calculate_winnings();
+    msg.clear();
     using namespace std;
     for(auto iter(m_names.begin()); iter != m_names.end(); ++iter){
-        cout
-            << '\n' << *iter << ", you have $"
-            << m_p_handle->player(*iter).money()
-            << '.'
-        << '\n';
-        cout << "Would you like to play again, " << *iter << '?';
+        std::stringstream catalyst("");
+        catalyst << m_p_handle->player(*iter).money();
+        msg
+            += "\n" + *iter + ", you have $" + catalyst.str() + ".\n"
+            "Would you like to play again, " + *iter + "?"
+        ;
+        cout << msg;
+        log_if(msg);
+
         do{
             cout << "\nPlease type \"yes\" or \"no\": ";
             std::string choice("");
             read_line(choice);
             cout << '\n';
+            log_if("Did player want to play again? " + choice);
+
             for(size_t i(0); i < choice.size(); ++i)
                 ::tolower(choice[i]);
             if(
@@ -155,10 +211,16 @@ bool BJGame_Flow_Handler::display_round_end(){
                     m_p_handle->erase_player(*iter);
                     m_p_handle->add_player(*iter, newamount);
                 }
+                log_if(*iter + " now playing with new amount.", newamount);
                 break;
-            }else if(choice == "yes")
+            }else if(choice == "yes"){
+                log_if(
+                    *iter + " currently has:",
+                    m_p_handle->player(*iter).money()
+                );
                 break;
-            else if(choice == "no"){
+            }else if(choice == "no"){
+                log_if(*iter + " has opted out.");
                 m_p_handle->erase_player(*iter);
                 --(iter = m_names.erase(iter));
                 break;
@@ -167,13 +229,17 @@ bool BJGame_Flow_Handler::display_round_end(){
         }while(true);
     }
     if(m_p_handle->players_left() > 0) return true;
-    else return false;
+    else if(log_enabled){
+        log("Game over.");
+        switch_log_state();
+    }
+    return false;
 }
 
 //Helpers
 void BJGame_Flow_Handler::choose_action(
     const BJPlayer_Handler::Name& name,
-    size_t& hand
+    size_t& currHand
 ){
     using namespace std;
     cout << '\n' << name << ", what would you like to do?";
@@ -187,82 +253,115 @@ void BJGame_Flow_Handler::choose_action(
         ;
         std::string choice("");
         read_line(choice);
+        log_if("Player chose: \"" + choice + "\"");
         cout << '\n';
         for(size_t i(0); i < choice.size(); ++i)
             ::tolower(choice[i]);
+
         if(choice == k_surrender){
             m_p_handle->surrender(name);
             break;
         }else if(choice == k_hit){
             std::string subchoice("yes");
             while(subchoice == "yes"){
-                m_p_handle->hit(name, hand);
-                cout
-                    << "You drew a "
-                    << m_p_handle
-                        -> last_card(name, hand) -> name()
-                << '\n';
-                if(m_p_handle->out(name)){
+                bool bust(m_p_handle->hit(name, currHand));
+
+                if(m_p_handle->last_card(name, currHand) == nullptr)
+                    throw std::runtime_error("Empty hand.");
+                const string drawn_msg(
+                    "You drew a "
+                    + m_p_handle
+                        -> last_card(name, currHand)
+                        -> name()
+                    + "\n"
+                );
+                cout << drawn_msg;
+                log_if(drawn_msg);
+
+                if(bust){
                     cout << "BUST!";
+                    log_if("Bust!");
                     break;
                 }
                 cout << "Hit again(\"yes\" or \"no\")? ";
                 read_line(subchoice);
+                log_if("Player hit again? " + subchoice);
             }
             break;
         }else if(choice == k_double_down){
             m_p_handle->double_down(name);
-            cout
-                << "You drew a "
-                << m_p_handle
-                    -> last_card(name, hand) -> name()
-            << '\n';
-            if(m_p_handle->out(name))
+
+            if(m_p_handle->last_card(name, currHand) == nullptr)
+                throw std::runtime_error("Empty hand.");
+            const string drawn_msg(
+                "You drew a "
+                + m_p_handle
+                    -> last_card(name, currHand)
+                    -> name()
+                + "\n"
+            );
+            cout << drawn_msg;
+            log_if(drawn_msg);
+            if(m_p_handle->out(name)){
                 cout << "BUST!";
+                log_if("BUST!");
+            }
             break;
         }else if(choice == k_split){
                 //decrement hand so next iteration goes back
                 //  to the same hand
-            if(!m_p_handle->split(name, hand--)){
+            if(
+                ! m_p_handle
+                -> split(
+                    name
+                    , (currHand > 0 ? currHand-- : currHand)
+                )
+            ){
                 cout << "Cannot split";
-                ++hand;
+                log_if("Split unsuccessful");
+                ++currHand;
             }
-        /*
-            if(m_p_handle->hand_size(name, hand) != 2)
-                cout << "Cannot split.";
-            size_t
-                value1(m_p_handle->card(0, name, hand)->value),
-                value2(m_p_handle->card(1, name, hand)->value)
-            ;
-            if(value1 > 10) value1 = 10;
-            if(value2 > 10) value2 = 10;
-            if(value1 == value2){
-                m_p_handle->split(name, hand--);
-                break;
-            }else cout << "Cannot split.";
-        */
         }else if(choice == k_stand)
             break;
+        else if(choice == k_switchlog)
+            switch_log_state();
         else
             cout << "Unrecognised command. Please try again.";
     }
 }
 
-std::istream& read_line(std::string& dest, char delim){
-    std::getline(std::cin, dest, delim);
-    return std::cin;
-}
+#include <fstream>
 
-std::istream& read_number(unsigned long long& dest){
-    using namespace std;
-    while(!(std::cin >> dest)){
-        cin.clear();
-        cout
-            << "\nError. Not an acceptable number. "
-            << "Please enter a number: "
-        ;
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+namespace{
+    std::istream& read_line(std::string& dest, char delim){
+        std::getline(std::cin, dest, delim);
+        return std::cin;
     }
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    return std::cin;
+
+    std::istream& read_number(unsigned long long& dest){
+        using namespace std;
+        while(!(std::cin >> dest)){
+            cin.clear();
+            cout
+                << "\nError. Not an acceptable number. "
+                << "Please enter a number: "
+            ;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        return std::cin;
+    }
+
+    void switch_log_state(){
+        static std::ofstream dest("log.dat", std::ios_base::app);
+        if((log_enabled = !log_enabled)){
+            std::cout << "Logging enabled.";
+            Basic_Logger::output = &dest;
+            log("Logging started.");
+        }else{
+            std::cout << "Logging disabled.";
+            log("Logging ended.");
+            Basic_Logger::output = nullptr;
+        }
+    }
 }

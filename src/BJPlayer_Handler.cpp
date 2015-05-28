@@ -13,8 +13,10 @@ BJPlayer BJPlayer_Handler::player(Name key)const{
         return m_out_players.at(key);
     else return BJPlayer(0);
 }
+
 bool BJPlayer_Handler::player_exists(Name key)const
     {return check_key(key, m_players) || check_key(key, m_out_players);}
+
 size_t BJPlayer_Handler::hand_size(Name key, size_t hand_index)const{
     if(!check_key(key, m_players)) return 0;
     else return m_players.at(key).hand_size(hand_index);
@@ -30,6 +32,7 @@ size_t BJPlayer_Handler::hand_value(
     if(!check_key(key, m_players)) return 0;
     return m_players.at(key).hand_value(hand_index);
 }
+
 Deck::Card_ptr BJPlayer_Handler::card(
     size_t card_index,
     Name key,
@@ -38,6 +41,7 @@ Deck::Card_ptr BJPlayer_Handler::card(
     if(!check_key(key, m_players)) return nullptr;
     return m_players.at(key).card(card_index, hand_index);
 }
+
 Deck::Card_ptr BJPlayer_Handler::last_card(
     Name key,
     size_t hand_index
@@ -161,7 +165,7 @@ bool BJPlayer_Handler::split(Name key, size_t hand_index){
     return true;
 }
 
-void BJPlayer_Handler::calculate_winner(){
+void BJPlayer_Handler::calculate_winnings(){
     auto dealer_hand_value(m_dealer.hand_value() > k_blackjack
         ? 0 : m_dealer.hand_value());
     for(auto iter(m_players.begin()); iter != m_players.end(); ++iter){

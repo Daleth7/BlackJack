@@ -41,20 +41,22 @@
 		<Unit filename="h/BJGame_Flow_Handler.h" />
 		<Unit filename="h/BJPlayer.h" />
 		<Unit filename="h/BJPlayer_Handler.h" />
+		<Unit filename="h/Basic_Logger.h" />
 		<Unit filename="h/Card.h" />
 		<Unit filename="h/Deck.h" />
 		<Unit filename="h/DeckFactory.h" />
-		<Unit filename="h/STL_Extensions.h" />
 		<Unit filename="h/SuitDeckFactory.h" />
 		<Unit filename="h/UnoDeckFactory.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/BJGame_Flow_Handler.cpp" />
+		<Unit filename="src/BJGame_Flow_Handler.inl" />
 		<Unit filename="src/BJPlayer.cpp" />
 		<Unit filename="src/BJPlayer_Handler.cpp" />
+		<Unit filename="src/BJPlayer_Handler.inl" />
+		<Unit filename="src/Basic_Logger.inl" />
 		<Unit filename="src/Card.cpp" />
 		<Unit filename="src/Deck.cpp" />
 		<Unit filename="src/Deck.inl" />
-		<Unit filename="src/STL_Extensions.inl" />
 		<Unit filename="src/SuitDeckFactory.cpp" />
 		<Unit filename="src/UnoDeckFactory.cpp" />
 		<Extensions>
